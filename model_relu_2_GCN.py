@@ -104,7 +104,7 @@ for fold in folds:
 			y_pred = F.leaky_relu(y_pred.mm(W4))
 			loss = loss_fn(y_pred,y.view(batch,1))# + W1.norm(2) + W2.norm(2) + W3.norm(2)
 			print torch.log(loss)
-			if master_iteration % (epoch*iteration) == 0:
+			if master_iteration % (len(fold)/batch) == 0:
 				loss_array.append(torch.log(loss).data.numpy().tolist())
 				iteration_array.append(master_iteration)
 			optimizer.zero_grad()
