@@ -41,10 +41,11 @@ W3 = Variable(torch.randn(batch, 23, 5).type(FloatTensor), requires_grad=True)
 W4 = Variable(torch.randn(23*5, 1).type(FloatTensor), requires_grad=True)
 
 p = p[0]
-epochs = 50
+epochs = 100
 
 optimizer = torch.optim.Adam([W1,W2,W3,W4], lr=learning_rate)
 loss_fn = torch.nn.MSELoss(size_average=False)
+loss_array = []
 for epoch in xrange(epochs):
 	for iteration in xrange(len(p)/batch):
 		indices = p[iteration*batch: iteration*batch + batch]
@@ -88,9 +89,11 @@ for epoch in xrange(epochs):
 		y_pred = y_pred.view(batch, 23*5)
 		#y_pred = 2000*F.sigmoid(y_pred.mm(W4))
 		y_pred = F.leaky_relu(y_pred.mm(W4))
-		loss = loss_fn(y_pred,y.view(batch,1)) + W1.norm(2) + W2.norm(2) + W3.norm(2)
+		loss = loss_fn(y_pred,y.view(batch,1))# + W1.norm(2) + W2.norm(2) + W3.norm(2)
 		print torch.log(loss)
+		loss_array.append(torch.log(loss).data.numpy().tolist())
 		optimizer.zero_grad()
 		loss.backward()
 		optimizer.step()
 print "done"
+print loss_array
