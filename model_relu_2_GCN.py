@@ -55,7 +55,7 @@ fold_iteration = 0
 #master_iteration = 0
 
 for fold in folds:
-	fold_iteration += 1
+	#fold_iteration += 1
 	master_iteration = 0
 	loss_array = []
 	iteration_array = []
@@ -113,16 +113,15 @@ for fold in folds:
 			master_iteration += 1
 	master_loss_array.append(loss_array)
 	master_iteration_array.append(iteration_array)
-	break
 	#if fold_iteration >= 4:
 	#	break
 print "done"
 print loss_array
 
-a = master_loss_array[0]
-b = master_iteration_array[0]
-plt.plot(b,a)
-plt.legend(['Loss'], loc='upper left')
+a = master_loss_array
+b = master_iteration_array
+plt.plot(b[0],a[0], b[1],a[1], b[2], a[2], b[3], a[3], b[4], a[4])
+plt.legend(['Fold1', 'Fold2', 'Fold3', 'Fold4', 'Fold5'], loc='upper left')
 plt.xlabel('Iterations')
 plt.ylabel('Log Error')
 plt.show()
