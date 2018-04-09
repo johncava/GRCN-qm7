@@ -39,26 +39,35 @@ FloatTensor = torch.FloatTensor
 learning_rate = 1e-2
 
 # Create random tensor weights
-W1 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
-W2 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
-W3 = Variable(torch.randn(batch, 23, 5).type(FloatTensor), requires_grad=True)
-W4 = Variable(torch.randn(23*5, 1).type(FloatTensor), requires_grad=True)
+#W1 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
+#W2 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
+#W3 = Variable(torch.randn(batch, 23, 5).type(FloatTensor), requires_grad=True)
+#W4 = Variable(torch.randn(23*5, 1).type(FloatTensor), requires_grad=True)
 
 #p = p[0]
 epochs = 100
 
-optimizer = torch.optim.Adam([W1,W2,W3,W4], lr=learning_rate)
-loss_fn = torch.nn.MSELoss(size_average=False)
+#optimizer = torch.optim.Adam([W1,W2,W3,W4], lr=learning_rate)
+#loss_fn = torch.nn.MSELoss(size_average=False)
 master_loss_array = []
 master_iteration_array = []
 fold_iteration = 0
 #master_iteration = 0
 
 for fold in folds:
-	#fold_iteration += 1
+	fold_iteration += 1
 	master_iteration = 0
 	loss_array = []
 	iteration_array = []
+
+	W1 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
+	W2 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
+	W3 = Variable(torch.randn(batch, 23, 5).type(FloatTensor), requires_grad=True)
+	W4 = Variable(torch.randn(23*5, 1).type(FloatTensor), requires_grad=True)
+
+	optimizer = torch.optim.Adam([W1,W2,W3,W4], lr=learning_rate)
+	loss_fn = torch.nn.MSELoss(size_average=False)
+	
 	for epoch in xrange(1,epochs):
 		for iteration in xrange(1,len(fold)/batch):
 			indices = fold[iteration*batch: iteration*batch + batch]
@@ -103,7 +112,7 @@ for fold in folds:
 			#y_pred = 2000*F.sigmoid(y_pred.mm(W4))
 			y_pred = F.leaky_relu(y_pred.mm(W4))
 			loss = loss_fn(y_pred,y.view(batch,1))# + W1.norm(2) + W2.norm(2) + W3.norm(2)
-			print torch.log(loss)
+			#print torch.log(loss)
 			if master_iteration % (len(fold)/batch) == 0:
 				loss_array.append(torch.log(loss).data.numpy().tolist())
 				iteration_array.append(master_iteration)
@@ -115,6 +124,7 @@ for fold in folds:
 	master_iteration_array.append(iteration_array)
 	#if fold_iteration >= 4:
 	#	break
+	print 'Fold ', fold_iteration, ' Done'
 print "done"
 print loss_array
 
