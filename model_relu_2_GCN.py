@@ -1,3 +1,7 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
 import scipy
 import numpy
 import torch
@@ -97,3 +101,10 @@ for epoch in xrange(epochs):
 		optimizer.step()
 print "done"
 print loss_array
+
+plt.plot(loss_array)
+plt.legend(['Loss'], loc='upper left')
+plt.xlabel('Iterations')
+plt.ylabel('Log Error')
+plt.show()
+plt.savefig('results_relu_2layer_GCN.png')
