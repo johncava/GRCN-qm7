@@ -10,7 +10,7 @@ from scipy.io import loadmat
 import torch.nn.functional as F
 
 data = loadmat('qm7.mat')
-X = data['X']
+dataset = data['X']
 folds = data['P']
 label = data['T']
 
@@ -54,7 +54,16 @@ master_iteration_array = []
 fold_iteration = 0
 #master_iteration = 0
 
+# Preprocess the entire dataset beforehand
+X = {}
+for index, item in enumerate(dataset):
+	A, D = preprocess(item)
+	X[index] = (A,D)
+
+print 'Preprocessing Finished'
+
 for fold in folds:
+	#break
 	fold_iteration += 1
 	master_iteration = 0
 	loss_array = []
@@ -76,11 +85,12 @@ for fold in folds:
 			x_list = []
 			y_list = []
 			for index in indices:
-				a_hat, d = preprocess(X[index])
+				a_hat, d = X[index]
 				a_list.append(a_hat)
 				d_list.append(d)
-				x_list.append(X[index])
+				x_list.append(dataset[index])
 				y_list.append(label[0][index])
+			#print x_list
 			a_list = numpy.array(a_list)
 			a_list = torch.from_numpy(a_list)
 			a_list = Variable(a_list, requires_grad = False)
@@ -134,5 +144,6 @@ plt.plot(b[0],a[0], b[1],a[1], b[2], a[2], b[3], a[3], b[4], a[4])
 plt.legend(['Fold1', 'Fold2', 'Fold3', 'Fold4', 'Fold5'], loc='upper left')
 plt.xlabel('Iterations')
 plt.ylabel('Log Error')
+plt.title('GCN 2 Layer with leaky_relu')
 plt.show()
 plt.savefig('results_relu_2layer_GCN.png')
