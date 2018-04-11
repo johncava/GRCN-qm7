@@ -36,7 +36,7 @@ def preprocess(x):
 
 #print x[2010]
 FloatTensor = torch.FloatTensor
-learning_rate = 1e-5
+learning_rate = 1e-1
 
 # Create random tensor weights
 #W1 = Variable(torch.randn(batch, 23, 23).type(FloatTensor), requires_grad=True)
@@ -152,6 +152,6 @@ plt.plot(b[0],a[0], b[1],a[1], b[2], a[2], b[3], a[3], b[4], a[4])
 plt.legend(['Fold1', 'Fold2', 'Fold3', 'Fold4', 'Fold5'], loc='upper left')
 plt.xlabel('Iterations')
 plt.ylabel('Log Error')
-plt.title('GCN 6 Layer with leaky_relu (lr=1e-5)')
+plt.title('GCN 6 Layer with leaky_relu (lr=1e-1)')
 plt.show()
-plt.savefig('results_relu_6layer_GCN_lr=1e-5.png')
+plt.savefig('results_relu_6layer_GCN_lr=1e-1.png')
